@@ -100,7 +100,7 @@ class ReportModel {
                 throw new ObjectNotExistError(`該篇${NAME_MAP[namespace]}不存在`);
             }
             Object.assign(partial_report, {
-                ref: new DBRef(EXPERIENCES_COLLECTION, id),
+                ref: new DBRef(namespace, new ObjectId(id)),
                 created_at: new Date(),
             });
 
@@ -190,7 +190,8 @@ class ReportModel {
                 throw new ObjectNotExistError(`該篇${NAME_MAP[namespace]}不存在`);
             }
             return this.collection.find({
-                ref: new DBRef(namespace, id),
+                // ref: { $ref: namespace, $id: new ObjectId(id) },
+                ref: new DBRef(namespace, new ObjectId(id)),
             }).sort(sort).skip(skip).limit(limit)
             .toArray();
         });
