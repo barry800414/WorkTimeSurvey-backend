@@ -26,6 +26,7 @@ function _generateGetCompanyViewModel(companies) {
 router.get("/search", (req, res, next) => {
     const search = req.query.key || "";
     const page = req.query.page || 0;
+    console.log(req.query.test);
 
     if (search === "") {
         next(new HttpError("key is required", 422));
