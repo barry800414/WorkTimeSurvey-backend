@@ -100,6 +100,9 @@ const Query = gql`
         "取得薪資工時列表 （未下關鍵字搜尋的情況），只有從最新排到最舊"
         salary_work_times(start: Int!, limit: Int!): [SalaryWorkTime!]!
 
+        "取得單筆薪資工時資料"
+        salary_work_time(id: ID!): SalaryWorkTime
+
         "薪資工時總數"
         salary_work_time_count: Int!
     }
@@ -223,6 +226,19 @@ const resolvers = {
                 limit
             );
             return salary_work_times;
+        },
+
+        async salary_work_time(_, { id }, { db }) {
+            const salary_work_time_model = new WorkingModel(db);
+            const salary_work_time = await salary_work_time_model.getPublicWorkingsById(
+                id
+            );
+
+            if (!salary_work_time) {
+                return null;
+            } else {
+                return salary_work_time;
+            }
         },
         async salary_work_time_count(_, args, { manager }) {
             const query = {

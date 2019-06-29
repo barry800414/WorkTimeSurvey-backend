@@ -70,6 +70,33 @@ class WorkingModel {
     }
 
     /**
+     * 使用 workings id 來取得可以公開的 working
+     * @param {String} id_str - working id string
+     * @param {Object} opt - mongodb find field filter
+     * @return {Promise}
+     */
+    async getPublicWorkingsById(id_str, opt = {}) {
+        if (!this._isValidId(id_str)) {
+            throw new ObjectNotExistError("該筆資訊不存在");
+        }
+
+        const result = await this.collection.findOne(
+            {
+                _id: new mongo.ObjectId(id_str),
+                status: "published",
+                "archive.is_archived": false,
+            },
+            opt
+        );
+
+        if (result) {
+            return result;
+        }
+
+        throw new ObjectNotExistError("該筆資訊不存在");
+    }
+
+    /**
      * update the workings status by id
      * @param  {Stirng} id_str - workings id string
      * @param  {String} status
