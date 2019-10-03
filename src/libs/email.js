@@ -77,6 +77,40 @@ const sendEmailsFromTemplate = async (toAddresses, template, variables) => {
     );
 };
 
+(async () => {
+    const {
+        ExperienceViewLogNotificationTemplate,
+    } = require("./email_templates");
+    const template = new ExperienceViewLogNotificationTemplate();
+    sendEmailsFromTemplate(["barry800414@gmail.com"], template, {
+        username: "Wei-Ming",
+        experience: {
+            viewCount: 1000,
+            title: "雇佳股份有限公司 軟體工程師工作經驗",
+            content: "測試",
+            typeName: "工作心得",
+            url: "https://www.goodjob.life/experiences/123",
+        },
+        relatedContent: {
+            keyword: "軟體工程師",
+            experiences: [
+                {
+                    title: "聯發科股份有限公司 軟體工程師 面試經驗",
+                    url: "http://localhost:3000/experiences/xxooo",
+                },
+                {
+                    title: "聯發科股份有限公司 軟體工程師 面試經驗",
+                    url: "http://localhost:3000/experiences/xxooo",
+                },
+                {
+                    title: "聯發科股份有限公司 軟體工程師 面試經驗",
+                    url: "http://localhost:3000/experiences/xxooo",
+                },
+            ],
+        },
+    });
+})();
+
 module.exports = {
     sendEmails,
     sendEmailsFromTemplate,
