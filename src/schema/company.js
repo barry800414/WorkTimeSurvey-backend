@@ -93,11 +93,26 @@ const resolvers = {
                 return null;
             }
         },
-        popular_companies: async () => [
-            {
-                name: "聯發科",
-            },
-        ],
+        popular_companies: async (_, { limit }, ctx) => {
+            const topCompanies = await ctx.db
+                .collection("workings")
+                .aggregate([
+                    {
+                        $group: {
+                            _id: "$company.name",
+                            count: { $sum: 1 },
+                        },
+                    },
+                    {
+                        $sort: { count: -1 },
+                    },
+                    {
+                        $limit: limit,
+                    },
+                ])
+                .toArray();
+            return topCompanies.map(e => ({ name: e._id }));
+        },
     },
     Company: {
         salary_work_times: async (company, _, { manager }) => {
@@ -123,48 +138,40 @@ const resolvers = {
         work_experience_statistics: () => {},
         interview_experience_statistics: () => {},
 
-        average_salaries: () => {
-            return [
-                {
-                    company: {
-                        name: "聯發科",
+        average_salaries: async (company, _, ctx) => {
+            const results = await ctx.db
+                .collection("workings")
+                .aggregate([
+                    {
+                        $match: {
+                            "company.name": company.name,
+                        },
                     },
-                    job_title: {
-                        name: "軟體工程師",
+                    {
+                        $group: {
+                            _id: { jobTitle: "$job_title" },
+                            avg_salary: { $avg: "$estimated_hourly_wage" },
+                            count: { $sum: 1 },
+                        },
                     },
-                    data_count: 5,
-                    salary: {
-                        amount: 76000,
-                        type: "month",
+                    {
+                        $sort: { count: -1 },
                     },
+                    {
+                        $limit: 5,
+                    },
+                ])
+                .toArray();
+
+            return results.map(e => ({
+                company: { name: company.name },
+                job_title: { name: e._id.jobTitle },
+                data_count: e.count,
+                salary: {
+                    amount: parseInt(e.avg_salary),
+                    type: "hour",
                 },
-                {
-                    company: {
-                        name: "聯發科",
-                    },
-                    job_title: {
-                        name: "數位IC設計工程師",
-                    },
-                    data_count: 10,
-                    salary: {
-                        amount: 100000,
-                        type: "month",
-                    },
-                },
-                {
-                    company: {
-                        name: "聯發科",
-                    },
-                    job_title: {
-                        name: "硬體工程師",
-                    },
-                    data_count: 10,
-                    salary: {
-                        amount: 80000,
-                        type: "month",
-                    },
-                },
-            ];
+            }));
         },
     },
 };
