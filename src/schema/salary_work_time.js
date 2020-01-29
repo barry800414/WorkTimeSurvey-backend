@@ -65,22 +65,6 @@ const Type = gql`
         to: Int!
     }
 
-    type YearMonth {
-        year: Int!
-        month: Int!
-    }
-
-    type Salary {
-        type: SalaryType
-        amount: Int
-    }
-
-    type YesNoOrUnknownCount {
-        yes: Int!
-        no: Int!
-        unknown: Int!
-    }
-
     type OvertimeFrequencyCount {
         "對應到表單的「幾乎不」"
         seldom: Int!
@@ -112,13 +96,6 @@ const Type = gql`
     enum Order {
         DESCENDING
         ASCENDING
-    }
-
-    enum SalaryType {
-        year
-        month
-        day
-        hour
     }
 
     enum YesNoOrUnknown {

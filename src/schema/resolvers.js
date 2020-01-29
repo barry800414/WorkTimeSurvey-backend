@@ -3,6 +3,7 @@ const merge = R.reduce(R.mergeDeepLeft, {});
 
 module.exports = merge([
     // 盡量按造字典排序
+    require("./common").resolvers,
     require("./company_keyword").resolvers,
     require("./company").resolvers,
     require("./experience").resolvers,

@@ -361,19 +361,9 @@ const Mutation = gql`
         overall_rating: Int!
     }
 
-    input CompanyInput {
-        id: String
-        query: String!
-    }
-
     input InterviewTimeInput {
         year: Int!
         month: Int!
-    }
-
-    input SalaryInput {
-        type: SalaryType!
-        amount: Float!
     }
 
     input SectionInput {
@@ -410,19 +400,9 @@ const Mutation = gql`
         job_ending_time: JobEndingTimeInput
     }
 
-    enum IsCurrentEmployedType {
-        yes
-        no
-    }
-
     enum RecommendToOthersType {
         yes
         no
-    }
-
-    input JobEndingTimeInput {
-        year: Int!
-        month: Int!
     }
 
     type CreateWorkExperiencePayload {

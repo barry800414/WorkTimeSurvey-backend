@@ -34,6 +34,7 @@ module.exports = [
     Query,
     Mutation,
     // 盡量按造字典排序
+    ...require("./common").types,
     ...require("./company_keyword").types,
     ...require("./company").types,
     ...require("./experience").types,
