@@ -124,7 +124,36 @@ const Query = gql`
     }
 `;
 
-const Mutation = `
+const Mutation = gql`
+    input CreateSalaryWorkTimeInput {
+        company: CompanyInput!
+        job_title: String!
+        sector: String
+        gender: Gender
+        is_currently_employed: Boolean!
+        employment_type: EmploymentType
+        week_work_time: Float
+        overtime_frequency: Int
+        day_promised_work_time: Float
+        day_real_work_time: Float
+        has_overtime_salary: YesNoOrUnknown
+        is_overtime_salary_legal: YesNoOrUnknown
+        has_compensatory_dayoff: YesNoOrUnknown
+        salary: SalaryInput
+        experience_in_year: Int
+        email: String
+    }
+
+    type CreateSalaryWorkTimePayload {
+        success: Boolean!
+        experience: SalaryWorkTime!
+    }
+
+    extend type Mutation {
+        createSalaryWorkTime(
+            input: CreateSalaryWorkTimeInput!
+        ): CreateSalaryWorkTimePayload!
+    }
 `;
 
 const resolvers = {
